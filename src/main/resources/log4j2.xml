@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration status="TRACE">
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %p %l %X{USERCODE} %X{URL} %X{METHOD} - %msg%n"/>
+        </Console>
+        <!--
+        <JDBC name="databaseAppender" tableName="APP_LOG">
+            <ConnectionFactory class="com.sinosoft.cisfrm.config.LogDbUtil" method="getConnection"/>
+            <Column name="USERCODE" pattern="%X{USERCODE}" isUnicode="false"/>
+            <Column name="IP" pattern="%X{IP}" isUnicode="false"/>
+            <Column name="MESSAGE" pattern="%m" isUnicode="false"/>
+            <Column name="LEVEL" pattern="%p" isUnicode="false"/>
+            <Column name="THROWABLE" pattern="%ex{full}" isUnicode="false"/>
+            <Column name="LOGGER" pattern="%l" isUnicode="false"/>
+            <Column name="URL" pattern="%X{URL}" isUnicode="false"/>
+            <Column name="METHOD" pattern="%X{METHOD}" isUnicode="false"/>
+        </JDBC>
+        -->
+        <RollingRandomAccessFile name="fileAppender" fileName="../logs/application.log"
+                                 filePattern="../logs/application-%d{MM-dd-yyyy}-%i.log" immediateFlush="false">
+            <PatternLayout>
+                <pattern>%d{HH:mm:ss.SSS} [%t] %X{id} %X{username} %-5level %c{36} %l: %msg%n</pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy min="1" max="4"/>
+        </RollingRandomAccessFile>
+    </appenders>
+    <loggers>
+        <Root level="DEBUG">
+            <appender-ref ref="Console"/>
+            <!--
+            <appender-ref ref="fileAppender"/>
+            <appender-ref ref="databaseAppender"/>
+            -->
+        </Root>
+        <asyncLogger name="com.wangchg.study" level="DEBUG" includeLocation="true"/>
+        <asyncLogger name="org.apache" level="INFO"/>
+        <asyncLogger name="org.mybatis" level="INFO"/>
+        <asyncLogger name="org.springframework" level="INFO"/>
+        <asyncLogger name="org.hibernate" level="INFO"/>
+        <asyncLogger name="io.netty" level="DEBUG"/>
+    </loggers>
+</configuration>
